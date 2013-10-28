@@ -1,0 +1,10 @@
+
+1. Set up your Leap motion device. Follow this awesome guide: https://www.leapmotion.com/getting-started
+2. Download the Leap Motion SDK from here: https://developer.leapmotion.com/
+3. Extract the folder. You will find the sample C# application in a location: LeapSDK/samples/Sample.cs 
+4. Create a working project directory at any location. For example, let us create a directory 'LeapDev' in E drive.
+5. Copy Sample.cs & LeapCSharp.NET4.0 dll in that directory.
+6. Open the Developer command prompt.
+7. Type in the command: csc /reference:LeapCSharp.NET4.0.dll /platform:x86 /target:exe Sample.cs. This will create a Sample.exe executible. Copy Leap.dll and LeapCSharp.dll in the directory where Sample.exe is generated.
+8. Connect the Leap motion, start the leap motion service and run the Sample.exe from command prompt. Enjoy the interaction.
+9. Go through the sample application source code to understand how it works.

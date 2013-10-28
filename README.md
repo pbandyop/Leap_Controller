@@ -1,4 +1,4 @@
 LeapAbsRel
 ==========
 
-Absolute and Relative pointing using Leap Motion
+Absolute and Relative pointing using Leap Motion.
