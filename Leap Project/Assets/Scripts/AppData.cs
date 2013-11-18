@@ -27,6 +27,8 @@ public class AppData : MonoBehaviour {
 	public int leapWidth;					//width of leap zone (for relative mode)
 	public int leapCentreY;					//Height of CENTRE of leap zone (for relative mode)
 	public float leapZoneScale;				//Scaling used to fine tune size of leap zone (for relative mode)
+	public Vector2 vAbsTopReference;		//Reference point of top left of screen - from absolute calibration
+	public Vector2 vAbsBottomReference;		//Reference point of bottom right of screen - from absolute calibration
 	
 	//Make Object persistent across all levels
 	void Awake() {

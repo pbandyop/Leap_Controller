@@ -309,11 +309,11 @@ public class LeapPointing : MonoBehaviour {
 		
 		print ("vScreenIntersect X: " + vScreenIntersect.x + " Y: " + vScreenIntersect.y);
 		
-		float xTop = 400;
-		float YTop = 300;
+		float xTop = data.vAbsTopReference.x;
+		float YTop = data.vAbsTopReference.y;
 		
-		float xBottom = 1550;
-		float YBottom = 760;
+		float xBottom = data.vAbsBottomReference.x;
+		float YBottom = data.vAbsBottomReference.y;
 		
 		Vector2 vLeapCoords = new Vector2(vScreenIntersect.x * screenWidthUnity, (vScreenIntersect.y * screenHeightUnity) * -1 + screenHeightUnity);
 
@@ -339,6 +339,7 @@ public class LeapPointing : MonoBehaviour {
 		
 		
 		print ("vCursorPos X: " + vCursorPos.x + " Y: " + vCursorPos.y);
+		print ("TEST");
 	}
 	
 	
