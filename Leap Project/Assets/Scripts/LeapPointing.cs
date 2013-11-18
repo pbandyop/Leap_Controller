@@ -306,9 +306,37 @@ public class LeapPointing : MonoBehaviour {
 		Leap.Vector vLeapIntersect = screen.Intersect(finger, true);
 		//Convert Leap.Vector to Unity.Vector3 (floats)
 		Vector2 vScreenIntersect = new Vector2(vLeapIntersect.ToFloatArray()[0],vLeapIntersect.ToFloatArray()[1]);
+		
+		print ("vScreenIntersect X: " + vScreenIntersect.x + " Y: " + vScreenIntersect.y);
+		
+		float xTop = 400;
+		float YTop = 300;
+		
+		float xBottom = 1550;
+		float YBottom = 760;
+		
+		Vector2 vLeapCoords = new Vector2(vScreenIntersect.x * screenWidthUnity, (vScreenIntersect.y * screenHeightUnity) * -1 + screenHeightUnity);
+
+		print ("vLeapCoords X: " + vLeapCoords.x + " Y: " + vLeapCoords.y);
+		
+		
+		Vector2 vScreenConversion = new Vector2(vLeapCoords.x - xTop, vLeapCoords.y - YTop);
+		
+		float xRatio = screenWidthWindows / (xBottom - xTop);
+		float yRatio = screenHeightWindows / (YBottom - YTop);
+		
+		print ("xRation: " + xRatio);
+		print ("yRation: " + yRatio);
+		
+		print ("vScreenConversion X: " + vScreenConversion.x + " Y: " + vScreenConversion.y);
+		
+		
 		//Update cursor coordinates
-		vCursorPos.x = vScreenIntersect.x * screenWidthUnity;
-		vCursorPos.y = (vScreenIntersect.y * screenHeightUnity) * -1 + screenHeightUnity;
+		vCursorPos.x = vScreenConversion.x * xRatio;
+		vCursorPos.y = vScreenConversion.y * yRatio;
+		
+		
+		
 		
 		print ("vCursorPos X: " + vCursorPos.x + " Y: " + vCursorPos.y);
 	}
