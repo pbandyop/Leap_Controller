@@ -27,8 +27,10 @@ public class AbsoluteCalibration : MonoBehaviour {
 	
 	//Internal
 	int stage;
+	int stageCount;
 	Vector2 vLeapCoords;
-	
+	Vector2 vAveTopLeft;
+	Vector2 vAveBottomRight;
 	
 	//AppData links
 	GameObject dataObject;							//Persistent object holding AppData script
@@ -49,6 +51,7 @@ public class AbsoluteCalibration : MonoBehaviour {
 		controller = new Controller();
 		
 		stage = 1;
+		stageCount = 1;
 	
 	}
 	
@@ -63,7 +66,7 @@ public class AbsoluteCalibration : MonoBehaviour {
 			Stage1();
 		}else if (stage == 2){
 			Stage2();
-		}else {
+		}else if (stage == 3){
 			Stage3();
 		}
 	
@@ -74,43 +77,84 @@ public class AbsoluteCalibration : MonoBehaviour {
 		Rect labelBox = new Rect(UnityEngine.Screen.width/2-100, UnityEngine.Screen.height-50,200,20);
 		//Update interface based on stage
 		if(stage == 1){
-			GUI.Label(labelBox,"STAGE 1");
+			GUI.Label(labelBox,"STAGE " + stageCount + "/7");
 		}else if (stage == 2){
-			GUI.Label(labelBox,"STAGE 2");
+			GUI.Label(labelBox,"STAGE " + stageCount + "/7");
 		}else {
-			GUI.Label(labelBox,"STAGE 3");
+			GUI.Label(labelBox,"STAGE " + stageCount + "/7");
 		}
 	
     }
 	
 	void Stage1()
 	{
-		//If space bar down record top left coord
-		if (Input.GetKeyDown("space"))
+		//Record first top left cords
+		if (stageCount == 1)
 		{
-			data.vAbsTopReference.x = vLeapCoords.x;
-			data.vAbsTopReference.y = vLeapCoords.y;
-			
-			stage = 2;
+			if (Input.GetKeyDown("space"))
+			{
+				vAveTopLeft = new Vector2(vLeapCoords.x, vLeapCoords.y);
+				print ("vAveTopLeftX: " + vAveTopLeft.x + " vAveTopLeftY: " + vAveTopLeft.y);
+				stageCount++;
+				stage = 2;
+			}
+		}
+		else{
+			//If space bar down record top left coord
+			if (Input.GetKeyDown("space"))
+			{
+				vAveTopLeft = (vAveTopLeft + new Vector2(vLeapCoords.x, vLeapCoords.y)) / 2;	//Average new reading with current average
+				stageCount++;
+				if (stageCount != 7) {
+				stage = 2;
+				} else {
+					stage = 3;
+				}
+				
+			}
 		}
 	}
 	
 	void Stage2()
 	{
-		//If space bar down record top left coord
-		if (Input.GetKeyDown("space"))
+		//Record first bottom right cords
+		if (stageCount == 2)
 		{
-			data.vAbsBottomReference.x = vLeapCoords.x;
-			data.vAbsBottomReference.y = vLeapCoords.y;
-			
-			data.pointingMode = Mode.Absolute;
-			Application.LoadLevel("AbsolutePointing");
-			//stage = 3;
+			if (Input.GetKeyDown("space"))
+			{
+				vAveBottomRight = new Vector2(vLeapCoords.x, vLeapCoords.y);
+				print ("vAveBottomRightX: " + vAveBottomRight.x + " vAveBottomRightY: " + vAveBottomRight.y);
+				stageCount++;
+				stage = 1;
+			}
+		}
+		else{
+			//If space bar down record top left coord
+			if (Input.GetKeyDown("space"))
+			{
+				vAveBottomRight = (vAveBottomRight + new Vector2(vLeapCoords.x, vLeapCoords.y)) / 2;	//Average new reading with current average
+				stageCount++;
+				if (stageCount != 7) {
+				stage = 1;
+				} else {
+					stage = 3;
+				}
+			}
 		}
 	}
 	
 	void Stage3()
 	{
+		//Update AppData with calibration coordinates
+		data.vAbsTopReference = vAveTopLeft;
+		data.vAbsBottomReference = vAveBottomRight;
+		
+		print ("vAbsTopReferenceX: " + data.vAbsTopReference.x + " vAbsTopReferenceY: " + data.vAbsTopReference.y);
+		print ("vAbsBottomReferenceX: " + data.vAbsBottomReference.x + " vAbsBottomReferenceY: " + data.vAbsBottomReference.y);
+		//Select mode
+		data.pointingMode = Mode.Absolute;
+		//Load scene
+		Application.LoadLevel("AbsolutePointing");
 		
 	}
 	

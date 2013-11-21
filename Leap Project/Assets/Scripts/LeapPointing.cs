@@ -26,6 +26,10 @@ public class LeapPointing : MonoBehaviour {
 	
 	//Internal
 	Vector2 vCursorPos = Vector2.zero;				//Final result of pointing methods - used to update AppData
+	Vector2 vPrevLeapPos = Vector2.zero;            //Leap Pointer vlue of the previous frame - used to implement smoothing
+	Vector2 vTmp = Vector2.zero;                    //Stores the result from smoothing functions in order to smooth absolute pointing in the next frame
+	int flag= 0;                                    //tests if we need to update the position on screen or not in absolute pointing - used in absolute frame rate smoothing
+	Vector2 vPrevPrevLeapPos = Vector2.zero;
 	bool bGrabbed = false;							//Result of thumb pinch test - false if two 'fingers' detected, true if less
 	bool bMouseClick = false;						//Record if mouse clicked for title screen
 		//Screen dimensions
@@ -241,6 +245,17 @@ public class LeapPointing : MonoBehaviour {
 		
 	}
 	
+	Vector2 SmoothingMethod(Vector2 inputVector)
+	{
+		Vector2 tmpPos;
+		
+		tmpPos.x = ((0.35f*inputVector.x) + (0.35f*vPrevLeapPos.x) + (0.3f*vPrevPrevLeapPos.x));
+		tmpPos.y = ((0.35f*inputVector.y) + (0.35f*vPrevLeapPos.y) + (0.3f*vPrevPrevLeapPos.y));
+		vPrevPrevLeapPos = vPrevLeapPos;
+		vPrevLeapPos = inputVector;
+		return tmpPos;
+	}
+	
 	///// ABSOLUTE POINTING MODE /////
 	//Main algorithm - Meshack Musundi - http://www.codeproject.com/Articles/550336/Leap-Motion-Move-Cursor
 	void AbsolutePoint()
@@ -250,7 +265,7 @@ public class LeapPointing : MonoBehaviour {
 		currentTime = frame.Timestamp;
         timeChange = currentTime - previousTime;
 		
-		if (timeChange > 10000)
+		if (timeChange > 5000)
             {
                 if (!frame.Hands.IsEmpty)
                 {
@@ -266,7 +281,7 @@ public class LeapPointing : MonoBehaviour {
 
                         // Use tipVelocity to reduce jitters when attempting to hold
                         // the cursor steady
-                        if (tipVelocity > 25)
+                        if (tipVelocity > 7)
                         {
                             var xScreenIntersect = screen.Intersect(finger, true).x;
                             var yScreenIntersect = screen.Intersect(finger, true).y;
@@ -345,8 +360,15 @@ public class LeapPointing : MonoBehaviour {
 		
 		
 		//Update cursor coordinates in AppData
-		vCursorPos.x = vScreenConversion.x * xRatio;
-		vCursorPos.y = vScreenConversion.y * yRatio;
+		if (flag == 0 ){
+		vCursorPos = SmoothingMethod(new Vector2(vScreenConversion.x * xRatio,vScreenConversion.y * yRatio));
+		vTmp = vCursorPos;
+			flag++;
+		} else if (flag == 1) {
+			
+			vCursorPos = vTmp;
+			flag --;
+		}
 		
 		print ("vCursorPos X: " + vCursorPos.x + " Y: " + vCursorPos.y);
 		
