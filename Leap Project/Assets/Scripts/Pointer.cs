@@ -5,7 +5,7 @@
 
 //ADD TO CAMERA
 //Draws pointer to coordinates
-//Updated by main pointing script
+//Self updates using cursor position from global AppData
 
 using UnityEngine;
 using System.Collections;
@@ -50,6 +50,7 @@ public class Pointer : MonoBehaviour {
 	//Draw pointer at most recent coordinates
 	void OnGUI() {
 		//Change texture based on if pointer in 'grabbed' mode and draw to pointer position
+		GUI.depth =0;
 		if (bPointerGrabbed){
 			GUI.DrawTexture(new Rect(vPosition.x - radius, vPosition.y - radius, radius*2, radius*2), pointerGrabbedTexture);
 		}else{

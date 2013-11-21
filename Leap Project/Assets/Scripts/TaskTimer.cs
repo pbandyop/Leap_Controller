@@ -30,7 +30,7 @@ public class TaskTimer : MonoBehaviour {
 			//time = Time.time - myTimePoint;
 		}
 		
-		guiTextTimer.text = "time: " + Round(time, 2);
+		guiTextTimer.text = "Time: " + Round(time, 2);
 		
 	}
 	

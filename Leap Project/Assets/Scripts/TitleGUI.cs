@@ -11,7 +11,7 @@ using System.Collections;
 public class TitleGUI : MonoBehaviour {
 	
 	//GUI elements
-	string toggleText = "Space bar";	//Initialise for space bar pointing mode
+	string toggleText;	//Initialise for space bar pointing mode
 	int buttonWidth = 150;
 	int buttonHeight = 50;
 	int spacing = 30;
@@ -26,8 +26,18 @@ public class TitleGUI : MonoBehaviour {
 		dataObject = GameObject.Find("GlobalDataObject");
 		data = dataObject.GetComponent<AppData>();
 		//Setup AppData
-		data.bSpaceGrabMode = true;		//Initialise for space bar pointing mode
 		data.pointingMode = Mode.Mouse;
+		//Show mouse cursor
+		UnityEngine.Screen.showCursor = true;
+		//Setup button text
+		if (data.bSpaceGrabMode)
+			{
+				toggleText = "Space bar";
+			}
+			else
+			{
+				toggleText = "Thumb pinch";
+			}
 	}
 	
 	// Update is called once per frame
@@ -37,35 +47,38 @@ public class TitleGUI : MonoBehaviour {
 	
 	void OnGUI() {
 		//Main menu buttons
-		GUILayout.BeginArea(new Rect(Screen.width/2 - buttonWidth/2, Screen.height/2 - 200, buttonWidth, 400));
+		GUILayout.BeginArea(new Rect(Screen.width/2 - buttonWidth/2, Screen.height/2 - 150, buttonWidth, 300));
 			if(GUILayout.Button("Relative pointing", GUILayout.Height(buttonHeight)))
 			{
+				//Select mode
 				data.pointingMode = Mode.Relative;
+				//Hide mouse cursor
+				UnityEngine.Screen.showCursor = false;
+				//Load scene
 				Application.LoadLevel("RelativePointing");
 			}
 			GUILayout.Space(spacing);
 			if(GUILayout.Button("Absolute pointing", GUILayout.Height(buttonHeight)))
 			{
+				//Select mode
 				data.pointingMode = Mode.Calibration;
+				//Hide mouse cursor
+				UnityEngine.Screen.showCursor = false;
+				//Load scene
 				Application.LoadLevel("Calibration");
-			}
-			GUILayout.Space(spacing);
-			if(GUILayout.Button("Spare scene", GUILayout.Height(buttonHeight)))
-			{
-				data.pointingMode = Mode.Absolute;
-				Application.LoadLevel("AbsolutePointing");
 			}
 			GUILayout.Space(spacing);
 			if(GUILayout.Button("Quit", GUILayout.Height(buttonHeight)))
 			{
+				//Quit app
 				Application.Quit();
 			}
 			
 		GUILayout.EndArea();
 		
 		//Toggle grab mode from Spacebar to Thumb pinch
-		GUI.Label (new Rect (20, 10, 200, 20), "Toggle grab mode");
-		if (GUI.Button (new Rect(10, 40, 120, buttonHeight), toggleText))
+		GUI.Label (new Rect (Screen.width/2 + 150, Screen.height/2 - 90, 200, 20), "Toggle grab mode", data.menuStyle);
+		if (GUI.Button (new Rect(Screen.width/2 + 190, Screen.height/2 -50, 120, buttonHeight), toggleText))
 		{
 			if (data.bSpaceGrabMode)
 			{
@@ -78,10 +91,6 @@ public class TitleGUI : MonoBehaviour {
 				toggleText = "Space bar";
 			}	
 		}
-		
-
-
-	}
-	
+	}	
 }
 	

@@ -16,8 +16,8 @@ using System.Collections;
 public class Circles : MonoBehaviour {
 	
 	//Graphics
-	public int radiusCircle = 30;
-	public int radiusTarget = 40;
+	public int radiusCircle;
+	public int radiusTarget;
 	public float circleScreenOffset = 0.4f;
 	public float targetScreenOffset = 0.2f;
 	public Texture	texRedCircle, texYellowCircle, texBlueCircle, texGreenCircle;
@@ -28,8 +28,7 @@ public class Circles : MonoBehaviour {
 	Vector2 vRedTarPos, vYellowTarPos, vBlueTarPos, vGreenTarPos;				//Target positions
 	Vector2 vRedPos, vYellowPos, vBluePos, vGreenPos;							//Current positions of circles - updated by UpdateGUI
 	
-//////GUI scripts ////NEED TO REMOVE!!!!!!!!!!!!!
-	Pointer pointer;
+	//Timer script
 	TaskTimer timer;
 	
 	//AppData links
@@ -44,10 +43,14 @@ public class Circles : MonoBehaviour {
 	bool redActive, yellowActive, blueActive, greenActive;					//Circles active until successfully dropped on targets
 	int circleGrabbed = 0;	// 0=NONE; 1=red; 2=yellow; 3=blue; 4=green		//Records which circle currently grabbed
 	int completedCount = 0;													//Tracks number of completed circle drops
-	int hitRadius = 7;														//Distance from centre of target for circle position to be a hit
+	int hitRadius;														//Distance from centre of target for circle position to be a hit
 	
 	// Use this for initialization
 	void Start () {
+		//Link AppData
+		dataObject = GameObject.Find("GlobalDataObject");
+		data = dataObject.GetComponent<AppData>();
+		
 		//Setup circle positions
 		float xOffset = UnityEngine.Screen.width * circleScreenOffset;
 		float yOffset = UnityEngine.Screen.height * circleScreenOffset;
@@ -68,13 +71,18 @@ public class Circles : MonoBehaviour {
 		texBlueTargetCurrent = texBlueTarget;
 		texGreenTargetCurrent = texGreenTarget;
 		
-//////////Link scripts ////NEED TO REMOVE!!!!!!!!!!!!!
-		pointer = GetComponent<Pointer>();
+		
+		//Get AppData config
+		radiusTarget = data.targetRadius;
+		radiusCircle = data.circleRadius;
+		//Calculate hit radius - the distance centre of circle needs to be within centre of target to register a hit
+		//Based on target radius less circle radius
+		hitRadius = radiusTarget - (radiusCircle + 3);
+		
+		//Link timer script
 		timer = GetComponent<TaskTimer>();
 		
-		//Link AppData
-		dataObject = GameObject.Find("GlobalDataObject");
-		data = dataObject.GetComponent<AppData>();
+		
 		
 		//Use Reset for initialisation of logic
 		Reset();
@@ -92,7 +100,8 @@ public class Circles : MonoBehaviour {
 	//Get pointer coordinates and initiates circle state update
 	public void UpdateGUI(){
 		//convert pointer coords from V3 to V2 and update position + state
-		vPointer = new Vector2(pointer.vPosition.x, pointer.vPosition.y);
+		vPointer = new Vector2(data.vCursorPos.x, data.vCursorPos.y);
+//		vPointer = new Vector2(pointer.vPosition.x, pointer.vPosition.y);
 		pointerGrabbed = data.bPointerGrab;
 
 		//Execute logic based on which circle grabbed
@@ -233,7 +242,7 @@ public class Circles : MonoBehaviour {
 			default:
 			  //CODE
 			   break;
-			}
+			}		
 		Draw(vRedTarPos, radiusTarget, texRedTargetCurrent);
 		Draw(vYellowTarPos, radiusTarget, texYellowTargetCurrent);
 		Draw(vBlueTarPos, radiusTarget, texBlueTargetCurrent);

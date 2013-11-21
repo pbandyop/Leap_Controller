@@ -11,6 +11,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Leap;
 using System.Runtime.InteropServices;
 
@@ -26,18 +27,20 @@ public class LeapPointing : MonoBehaviour {
 	//Internal
 	Vector2 vCursorPos = Vector2.zero;				//Final result of pointing methods - used to update AppData
 	bool bGrabbed = false;							//Result of thumb pinch test - false if two 'fingers' detected, true if less
+	bool bMouseClick = false;						//Record if mouse clicked for title screen
 		//Screen dimensions
 	int screenWidthUnity, screenHeightUnity, screenWidthWindows, screenHeightWindows;
 		//Leap zone setup from AppData
 	int leapWidth, leapCentreY;
-	float leapScale;
 		//Calculated leap zone dimensions
-	int leapHeight, leapLeft, leapRight, leapTop, leapBottom;
+	int leapHeight;
 	Vector3 vRelativeScale;							//Scaling vector for relative mode
 		//Timing variables for smoothing
 	long currentTime;
     long previousTime;
     long timeChange;
+		//Smoothing
+	Queue<bool> qThumbPinched;						//Records last 3 values of thumb grabbing results - use to smooth grab action
 
 	
 	//AppData links
@@ -64,23 +67,16 @@ public class LeapPointing : MonoBehaviour {
 		//Leap dimensions fom AppData
 		leapWidth = data.leapWidth;
 		leapCentreY = data.leapCentreY;
-		leapScale = data.leapZoneScale;
 		
-		
-		
-		//Calculate Leap zone for relative mode
-		//Calculate Leap zone based on screen dimensions + predefined width and vertical centre
+		//Calculate Leap zone for relative mode based on screen dimensions + predefined width and vertical centre
 		//Leap window width to screen width ratio
 		float scale = (float)screenWidthUnity / leapWidth;					//cast to float to force float result
 		vRelativeScale = new Vector2(scale, scale);
 		//leapHeight as a ratio of screen height to width.
 		leapHeight = Mathf.RoundToInt(screenHeightUnity / (screenWidthUnity / leapWidth));
-		//Leap window calculations
-		leapLeft = leapWidth/2 * -1;
-		leapRight = leapWidth/2;
-		leapTop = leapCentreY + leapHeight/2;
-		leapBottom = leapCentreY - leapHeight/2;
 		
+		//Smoothing
+		qThumbPinched = new Queue<bool>();
 		
 	}
 	
@@ -94,7 +90,7 @@ public class LeapPointing : MonoBehaviour {
 		
 		//Check for gestures
 		Gestures();
-//print (data.pointingMode.ToString());
+		
 		//Select pointing method based on AppData pointing mode
 		switch (data.pointingMode)
 		{
@@ -118,6 +114,28 @@ public class LeapPointing : MonoBehaviour {
 		UpdateAppData();
 	}
 	
+	///// UPDATE GUI /////
+	void OnGUI() 
+	{
+		switch (data.pointingMode)
+		{
+		    case Mode.Mouse:
+				
+				break;
+		    case Mode.Relative:
+				GUI.Label (new Rect (screenWidthUnity/2 -100, screenHeightUnity - 40, 200, 20), "RELATIVE POINTING MODE", data.menuStyle);
+				break;
+			case Mode.Calibration:
+				GUI.Label (new Rect (screenWidthUnity/2 -100, screenHeightUnity - 40, 200, 20), "CALIBRATION MODE", data.menuStyle);
+				break;
+			case Mode.Absolute:
+				GUI.Label (new Rect (screenWidthUnity/2 -100, screenHeightUnity - 40, 200, 20), "ABSOLUTE POINTING MODE", data.menuStyle);
+				break;
+		    default:
+				break;
+		}
+	}
+	
 	///// UPDATE LEAP DATA /////
 	void UpdateLeap()
 	{
@@ -135,21 +153,56 @@ public class LeapPointing : MonoBehaviour {
 		{
 			LeapAsMouse.MouseClickLeft();
 		}
+		//Reset mouse click
+		bMouseClick = false;
 		
 		//Test for grab action
-		//If two fingers detected (finger and thumb spread)
-		if (fingers.Count > 1){
-			bGrabbed = false;
+		//If any fingers detected
+		if (fingers.Count > 0)
+		{
+			//If two fingers detected (finger and thumb spread)
+			if (fingers.Count > 1){
+				//Add result to queue
+				qThumbPinched.Enqueue(false);
+				
+				//if last 3 results are same (not true) then change pointer grabbed state to false
+				if (!qThumbPinched.Contains(true))
+				{
+					bGrabbed = false;
+				}
+				
+			}
+			//otherwise true (thumb against hand so not detected)
+			else{
+				//Add result to smoothing queue
+				qThumbPinched.Enqueue(true);
+
+				//if last 3 results are same (not false) then change pointer grabbed state to true
+				if (!qThumbPinched.Contains(false))
+				{
+					//If changing from false to true, mouse click (for menu buttons)
+					if (bGrabbed == false)
+					{
+						bMouseClick = true;
+					}
+					bGrabbed = true;
+				}	
+			}
 		}
-		//otherwise true (thumb against hand so not detected)
-		else{
-			bGrabbed = true;
+		
+		//Limit qThumbPinched smoothing queue to 3 elements
+		if (qThumbPinched.Count > 3)
+		{
+			qThumbPinched.Dequeue();	
 		}
 	}
 	
 	///// MOUSE POINTING MODE /////
 	void MousePoint()
 	{
+		//Place purple cursor just off screen
+		vCursorPos = new Vector2(-50,-50);
+		
 		//Get position of leading finger
 		Vector2 vFingerPos = RelativeLeapCoordinates();
 		
@@ -161,21 +214,17 @@ public class LeapPointing : MonoBehaviour {
 		if (fingers.Count > 0)
 		{
 			LeapAsMouse.SetCursorPos((int)screenX, (int)screenY);
+			//If mouse click detected while fingers detected AND mouse within unity screen
+			if (bMouseClick)
+			{
+				LeapAsMouse.MouseClickLeft();
+			}
 		}
 	}
 	
 	///// RELATIVE POINTING MODE /////
 	void RelativePoint()
 	{
-		//Hide mouse if finger detected
-		if (fingers.Count > 0)
-		{
-			UnityEngine.Screen.showCursor = false;
-		}
-		else
-		{
-			UnityEngine.Screen.showCursor = true;
-		}
 		
 		//Get position of leading finger
 		Vector2 vFingerPos = RelativeLeapCoordinates();
@@ -189,15 +238,6 @@ public class LeapPointing : MonoBehaviour {
 	/// </summary>
 	void CalibrationPoint()
 	{
-		//Hide mouse if finger detected
-		if (fingers.Count > 0)
-		{
-			UnityEngine.Screen.showCursor = false;
-		}
-		else
-		{
-			UnityEngine.Screen.showCursor = true;
-		}
 		
 	}
 	
@@ -205,15 +245,6 @@ public class LeapPointing : MonoBehaviour {
 	//Main algorithm - Meshack Musundi - http://www.codeproject.com/Articles/550336/Leap-Motion-Move-Cursor
 	void AbsolutePoint()
 	{
-		//Hide mouse if finger detected
-		if (fingers.Count > 0)
-		{
-			UnityEngine.Screen.showCursor = false;
-		}
-		else
-		{
-			UnityEngine.Screen.showCursor = true;
-		}
 		
 		//Update timing for smoothing
 		currentTime = frame.Timestamp;
@@ -274,29 +305,11 @@ public class LeapPointing : MonoBehaviour {
 
                 previousTime = currentTime;
             }
-		
-		
-		
-//		Leap.Vector vLeapIntersect;					//Position of intersection of finger [0]
-//		Vector3 vScreenIntersect;					//Vector for conversion of Leap. Position of intersection vLeapIntersect to Unity.Vector3
-//		Leap.Screen screen;							//Screen object used for Intersection of ray from finger
-		
-		
-//print (vFingerPos.x + " +++ " + vFingerPos.y);
 	}
 	
 	///// ABSOLUTE POINTING MODE /////
 	void AbsolutePoint2()
 	{
-		//Hide mouse if finger detected
-		if (fingers.Count > 0)
-		{
-			UnityEngine.Screen.showCursor = false;
-		}
-		else
-		{
-			UnityEngine.Screen.showCursor = true;
-		}
 		
 		// Get the first finger in the list of fingers
         Finger finger = frame.Fingers[0];
@@ -322,8 +335,8 @@ public class LeapPointing : MonoBehaviour {
 		
 		Vector2 vScreenConversion = new Vector2(vLeapCoords.x - xTop, vLeapCoords.y - YTop);
 		
-		float xRatio = screenWidthWindows / (xBottom - xTop);
-		float yRatio = screenHeightWindows / (YBottom - YTop);
+		float xRatio = screenWidthUnity / (xBottom - xTop);
+		float yRatio = screenHeightUnity / (YBottom - YTop);
 		
 		print ("xRation: " + xRatio);
 		print ("yRation: " + yRatio);
@@ -331,15 +344,14 @@ public class LeapPointing : MonoBehaviour {
 		print ("vScreenConversion X: " + vScreenConversion.x + " Y: " + vScreenConversion.y);
 		
 		
-		//Update cursor coordinates
+		//Update cursor coordinates in AppData
 		vCursorPos.x = vScreenConversion.x * xRatio;
 		vCursorPos.y = vScreenConversion.y * yRatio;
 		
-		
-		
-		
 		print ("vCursorPos X: " + vCursorPos.x + " Y: " + vCursorPos.y);
-		print ("TEST");
+		
+		
+//		print ("vCursorPos X: " + vCursorPos.x + " Y: " + vCursorPos.y);
 	}
 	
 	

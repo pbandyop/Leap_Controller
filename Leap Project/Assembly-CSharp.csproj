@@ -45,7 +45,6 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\AbsoluteCalibration.cs" />
-     <Compile Include="Assets\Scripts\AbsolutePointing.cs" />
      <Compile Include="Assets\Scripts\AppData.cs" />
      <Compile Include="Assets\Scripts\Bootstrap.cs" />
      <Compile Include="Assets\Scripts\Circles.cs" />
@@ -53,7 +52,6 @@
      <Compile Include="Assets\Scripts\LeapAsMouse.cs" />
      <Compile Include="Assets\Scripts\LeapPointing.cs" />
      <Compile Include="Assets\Scripts\Pointer.cs" />
-     <Compile Include="Assets\Scripts\RelativePointing.cs" />
      <Compile Include="Assets\Scripts\TaskTimer.cs" />
      <Compile Include="Assets\Scripts\TitleGUI.cs" />
  <Reference Include="LeapCSharp.NET3.5">

@@ -1,12 +1,11 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\AbsoluteCalibration.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\TitleGUI.cs">
     <Files>
-      <File FileName="Assets\Scripts\AppData.cs" Line="31" Column="72" />
-      <File FileName="Assets\Scripts\LeapPointing.cs" Line="342" Column="18" />
-      <File FileName="Assets\Scripts\AbsoluteCalibration.cs" Line="114" Column="2" />
-      <File FileName="Assets\Scripts\KeyboardInput.cs" Line="41" Column="7" />
-      <File FileName="Assets\Scripts\TitleGUI.cs" Line="55" Column="5" />
+      <File FileName="Assets\Scripts\TitleGUI.cs" Line="45" Column="3" />
+      <File FileName="Assets\Scripts\AppData.cs" Line="44" Column="99" />
+      <File FileName="Assets\Scripts\Pointer.cs" Line="39" Column="25" />
+      <File FileName="Assets\Scripts\LeapPointing.cs" Line="204" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -3,9 +3,9 @@
  * University of Helsinki
  */
 
-// Captures all keyboard input - updates global AppData
+// Captures keyboard input - updates global AppData
 // Uses AppData to communicated with other scripts
-// Linked to persistent 
+// Linked to persistent object
 
 using UnityEngine;
 using System.Collections;
@@ -66,11 +66,11 @@ public class KeyboardInput : MonoBehaviour {
 		//Display grab mode on all scenes
 		if (data.bSpaceGrabMode)
 		{
-			GUI.Label (new Rect (20, UnityEngine.Screen.height-20, 150, 20), "Space bar grab mode");
+			GUI.Label (new Rect (50, UnityEngine.Screen.height-30, 150, 20), "Space bar grab mode", data.menuStyle);
 		}
 		else
 		{
-			GUI.Label (new Rect (20, UnityEngine.Screen.height-20, 150, 20), "Thumb pinch grab mode");
+			GUI.Label (new Rect (50, UnityEngine.Screen.height-30, 150, 20), "Thumb pinch grab mode", data.menuStyle);
 		}
 	}
 }

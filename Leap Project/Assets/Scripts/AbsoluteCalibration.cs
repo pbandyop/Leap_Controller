@@ -19,12 +19,11 @@ public class AbsoluteCalibration : MonoBehaviour {
 	//Leap
 	Controller controller;							//Main Leap controller
 	Frame frame;									//Frame of Leap data - updated every frame
-	FingerList fingers;								//List of fingers from frame		
 	Leap.Vector vFinger;							//Leap data for coords of foremost finger
 	GestureList gestures;							//Gestures from frame
 	
 	//Screen dimensions
-	int screenWidthUnity, screenHeightUnity, screenWidthWindows, screenHeightWindows;
+	int screenWidthUnity, screenHeightUnity;
 	
 	//Internal
 	int stage;
@@ -45,8 +44,6 @@ public class AbsoluteCalibration : MonoBehaviour {
 				//screen dimensions
 		screenWidthUnity = UnityEngine.Screen.width;							//Dimensions of Unity window
 		screenHeightUnity = UnityEngine.Screen.height;
-		screenWidthWindows = UnityEngine.Screen.currentResolution.width;		//Dimensions of whole screen (regardless of app window size)
-		screenHeightWindows = UnityEngine.Screen.currentResolution.height;
 		
 		//Initialise Leap controller and enable require gestures
 		controller = new Controller();
@@ -122,17 +119,6 @@ public class AbsoluteCalibration : MonoBehaviour {
 	void UpdateLeap()
 	{
 		frame = controller.Frame ();							//Get current frame data
-		fingers = frame.Fingers;								//Update finger list from frame
-		
-		//Hide mouse if finger detected
-		if (fingers.Count > 0)
-		{
-			UnityEngine.Screen.showCursor = false;
-		}
-		else
-		{
-			UnityEngine.Screen.showCursor = true;
-		}
 		
 		// Get the first finger in the list of fingers
         Finger finger = frame.Fingers[0];
@@ -145,7 +131,7 @@ public class AbsoluteCalibration : MonoBehaviour {
 		
 		vLeapCoords = new Vector2(vScreenIntersect.x * screenWidthUnity, (vScreenIntersect.y * screenHeightUnity) * -1 + screenHeightUnity);
 		
-		print ("vLeapCoords X: " + vLeapCoords.x + " Y: " + vLeapCoords.y);
+//		print ("vLeapCoords X: " + vLeapCoords.x + " Y: " + vLeapCoords.y);
 		
 
 	}
