@@ -27,6 +27,11 @@ using System.Collections;
 using Leap;
 
 public class AbsoluteCalibration : MonoBehaviour {
+	
+	//Graphics
+	public Texture	texRedCircle;
+	Vector2 vCirclePos;
+	int radiusCircle;
 
 	//Leap
 	Controller controller;							//Main Leap controller
@@ -56,8 +61,8 @@ public class AbsoluteCalibration : MonoBehaviour {
 		dataObject = GameObject.Find("GlobalDataObject");
 		data = dataObject.GetComponent<AppData>();
 
-				//screen dimensions
-		screenWidthUnity = UnityEngine.Screen.width;							//Dimensions of Unity window
+		//screen dimensions
+		screenWidthUnity = UnityEngine.Screen.width;							
 		screenHeightUnity = UnityEngine.Screen.height;
 
 		//Initialise Leap controller and enable require gestures
@@ -65,11 +70,15 @@ public class AbsoluteCalibration : MonoBehaviour {
 
 		stage = 1;
 		stageCount = 1;
+		
+		//Target circle size
+		radiusCircle = 100;
 
 	}
 
 	// Update is called once per frame
 	void Update () {
+		
 		//Update leap data
 		UpdateLeap();
 
@@ -87,15 +96,46 @@ public class AbsoluteCalibration : MonoBehaviour {
 
 	//Create static labels on screen
 	void OnGUI() {
-		Rect labelBox = new Rect(UnityEngine.Screen.width/2-100, UnityEngine.Screen.height-50,200,20);
+		Rect labelBox = new Rect(UnityEngine.Screen.width/2-100, UnityEngine.Screen.height-100,200,20);
 
 		//Update interface based on stage
 		if (stage == 1) {
-			GUI.Label(labelBox,"STAGE " + stageCount + "/7");
+			//position circle
+			vCirclePos = new Vector2(0,0);
+			//Draw circle
+			Draw(vCirclePos, radiusCircle, texRedCircle);
+			
+			//Instructions
+			GUI.Label (new Rect (UnityEngine.Screen.width/2 -100, UnityEngine.Screen.height/2, 200, 20),
+					"POINT FINGER AT RED CORNER", data.menuStyle);
+			GUI.Label (new Rect (UnityEngine.Screen.width/2 -100, UnityEngine.Screen.height/2 + 40, 200, 20),
+					"and CLICK LEFT MOUSE or SPACE BAR", data.menuStyle);
+			GUI.Label (labelBox, "STAGE " + stageCount + "/7", data.menuStyle);
+			
 		} else if (stage == 2){
-			GUI.Label(labelBox,"STAGE " + stageCount + "/7");
+			
+			//position circle
+			vCirclePos = new Vector2(UnityEngine.Screen.width,UnityEngine.Screen.height);
+			//Draw circle
+			Draw(vCirclePos, radiusCircle, texRedCircle);
+			
+			//Instructions
+			GUI.Label (new Rect (UnityEngine.Screen.width/2 -100, UnityEngine.Screen.height/2, 200, 20),
+					"POINT FINGER AT RED CORNER", data.menuStyle);
+			GUI.Label (new Rect (UnityEngine.Screen.width/2 -100, UnityEngine.Screen.height/2 + 40, 200, 20),
+					"and CLICK LEFT MOUSE or SPACE BAR", data.menuStyle);
+			GUI.Label (labelBox, "STAGE " + stageCount + "/7", data.menuStyle);
+			
 		} else {
-			GUI.Label(labelBox,"STAGE " + stageCount + "/7");
+			
+			//Instructions
+			GUI.Label (new Rect (UnityEngine.Screen.width/2 -100, UnityEngine.Screen.height/2, 200, 20),
+					"IS THIS CALIBRATION ACCEPTABLE?", data.menuStyle);
+			GUI.Label (new Rect (UnityEngine.Screen.width/2 -100, UnityEngine.Screen.height/2 + 40, 200, 20),
+					"CLICK LEFT MOUSE or SPACE BAR TO ACCEPT", data.menuStyle);
+			GUI.Label (new Rect (UnityEngine.Screen.width/2 -100, UnityEngine.Screen.height/2 + 80, 200, 20),
+					"or PRESS R TO RECALIBRATE", data.menuStyle);
+			GUI.Label (labelBox, "STAGE " + stageCount + "/7", data.menuStyle);
 		}
 
     }
@@ -103,15 +143,14 @@ public class AbsoluteCalibration : MonoBehaviour {
 	void Stage1() {
 		//Record first top left cords
 		if (stageCount == 1) {
-			if (Input.GetKeyDown("space")) {
+			if (Input.GetKeyDown("space") || Input.GetKeyDown("mouse 0")) {
 				vAveTopLeft = new Vector2(vLeapCoords.x, vLeapCoords.y);
-				print ("vAveTopLeftX: " + vAveTopLeft.x + " vAveTopLeftY: " + vAveTopLeft.y);
 				stageCount++;
 				stage = 2;
 			}
 		} else {
 			//If space bar down record top left coord
-			if (Input.GetKeyDown("space")) {
+			if (Input.GetKeyDown("space") || Input.GetKeyDown("mouse 0")) {
 				//Average new reading with current average
 				vAveTopLeft = (vAveTopLeft + new Vector2(vLeapCoords.x, vLeapCoords.y)) / 2;
 				stageCount++;
@@ -127,15 +166,14 @@ public class AbsoluteCalibration : MonoBehaviour {
 	void Stage2() {
 		//Record first bottom right cords
 		if (stageCount == 2) {
-			if (Input.GetKeyDown("space")) {
+			if (Input.GetKeyDown("space") || Input.GetKeyDown("mouse 0")) {
 				vAveBottomRight = new Vector2(vLeapCoords.x, vLeapCoords.y);
-				print ("vAveBottomRightX: " + vAveBottomRight.x + " vAveBottomRightY: " + vAveBottomRight.y);
 				stageCount++;
 				stage = 1;
 			}
 		} else {
 			//If space bar down record top left coord
-			if (Input.GetKeyDown("space")) {
+			if (Input.GetKeyDown("space") || Input.GetKeyDown("mouse 0")) {
 				//Average new reading with current average
 				vAveBottomRight = (vAveBottomRight + new Vector2(vLeapCoords.x, vLeapCoords.y)) / 2;
 				stageCount++;
@@ -153,19 +191,22 @@ public class AbsoluteCalibration : MonoBehaviour {
 		data.vAbsTopReference = vAveTopLeft;
 		data.vAbsBottomReference = vAveBottomRight;
 
-		print ("vAbsTopReferenceX: " + data.vAbsTopReference.x + " vAbsTopReferenceY: " + data.vAbsTopReference.y);
-		print ("vAbsBottomReferenceX: " + data.vAbsBottomReference.x + " vAbsBottomReferenceY: "
-			+ data.vAbsBottomReference.y);
-
 		//Select mode
 		data.pointingMode = Mode.Absolute;
-
-		//Load scene
-		Application.LoadLevel("AbsolutePointing");
+		
+		//Accept calibration
+		if (Input.GetKeyDown("space") || Input.GetKeyDown("mouse 0")) {
+			Application.LoadLevel("AbsolutePointing");
+		}
+		
+		//Reset calibration to re-run full calibration mode
+		if (Input.GetKeyDown("r")) {
+			Reset ();
+		}
 
 	}
 
-	///// ABSOLUTE POINTING MODE /////
+	///// ABSOLUTE POINTING DATA/////
 	void UpdateLeap() {
 		frame = controller.Frame ();							//Get current frame data
 
@@ -184,7 +225,22 @@ public class AbsoluteCalibration : MonoBehaviour {
 
 		vLeapCoords = new Vector2(vScreenIntersect.x * screenWidthUnity, (vScreenIntersect.y * screenHeightUnity) *
 		 -1 + screenHeightUnity);
-
+	}
+	
+	//Draw texture @ position
+	void Draw (Vector2 pos, int radius, Texture texture) {
+		GUI.DrawTexture(new Rect(pos.x - radius, pos.y - radius, radius*2, radius*2), texture);
+	}
+	
+	//Reset calibration to stage 1
+	void Reset ()
+	{
+		stage = 1;
+		stageCount = 1;
+		// reset mode
+		data.pointingMode = Mode.Calibration;
+		//place pointer off screen
+		data.vCursorPos = new Vector2(0,0);
 	}
 
 }

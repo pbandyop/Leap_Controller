@@ -50,7 +50,7 @@ public class KeyboardInput : MonoBehaviour {
 
 		// If grab mode is 'space bar' set bPointerGrab true when space bar down.
 		if (data.bSpaceGrabMode) {
-			if (Input.GetKey("space")) {
+			if (Input.GetKey("space") || Input.GetKey("mouse 0")) {
 				data.bPointerGrab = true;
 			} else {
 				data.bPointerGrab = false;

@@ -25,16 +25,14 @@ using System.Collections;
 
 public class TitleGUI : MonoBehaviour {
 
-	// GUI elements.
-
+	// GUI elements
 	string toggleText;					// Initialise for space bar pointing mode.
 
 	int buttonWidth = 150;
 	int buttonHeight = 50;
 	int spacing = 30;
 
-	// AppData links.
-
+	// AppData links
 	GameObject dataObject;				// Persistent object holding AppData script.
     AppData data; 						// Script storing global app data required across scenes.
 

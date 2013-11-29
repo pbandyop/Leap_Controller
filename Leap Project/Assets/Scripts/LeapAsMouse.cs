@@ -33,7 +33,6 @@ public class LeapAsMouse : MonoBehaviour {
 
 	//Control mouse pointer position
     public static extern bool SetCursorPos (int x, int y);
-	//call using LeapAsMouse.SetCursorPos(x,y);
 
 	//control mouse clicks
 	[DllImport("user32.dll")]

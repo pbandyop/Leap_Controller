@@ -53,13 +53,6 @@ public class Pointer : MonoBehaviour {
 		bPointerGrabbed = data.bPointerGrab;
 	}
 
-	//Override Update
-	//Update coordinates - called by main ......Pointing script
-	//	public void Update(Vector3 coords, bool grabbed){
-	//		v3Position = coords;
-	//		bPointerGrabbed = grabbed;
-	//	}
-
 	//Draw pointer at most recent coordinates
 	void OnGUI() {
 		//Change texture based on if pointer in 'grabbed' mode and draw to pointer position
@@ -71,7 +64,6 @@ public class Pointer : MonoBehaviour {
 		} else {
 			GUI.DrawTexture (new Rect (vPosition.x - radius, vPosition.y - radius, radius*2, radius*2), pointerTexture);
 		}
-		//DrawPointerCircle(v3Position.x,vPosition.y);
 	}
 
 

@@ -29,18 +29,15 @@ public class TaskTimer : MonoBehaviour {
 	public GUIText guiTextTimer;
 	float time = 0f;
 	public bool running = false;
-	//	float myTimePoint = 0f;
 
 	// Use this for initialization
 	void Start () {
-
 	}
 
 	// Update is called once per frame
 	void Update () {
 		if (running) {
 			time += Time.deltaTime;
-			//time = Time.time - myTimePoint;
 		}
 
 		guiTextTimer.text = "Time: " + Round(time, 2);
@@ -49,7 +46,6 @@ public class TaskTimer : MonoBehaviour {
 
 	public void StartTimer () {
 		running = true;
-	//  myTimePoint = Time.time;
 	}
 
 	public void StopTimer (){
