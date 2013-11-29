@@ -42,11 +42,13 @@ public class LeapPointing : MonoBehaviour {
 	Vector2 vCursorPos = Vector2.zero;
 
 	//Leap Pointer vlue of the previous frame - used to implement smoothing
-	Vector2 vPrevLeapPos = Vector2.zero;
+	//Vector2 vPrevLeapPos = Vector2.zero;
 
 	//Stores the result from smoothing functions in order to smooth absolute pointing in the next frame
-	Vector2 vTmp = Vector2.zero;
-
+	Vector2[] vTmp =new Vector2[3];
+	Vector2 vTmpDelay = Vector2.zero;
+	Vector2[] vArray = new Vector2[9];
+	
 	//tests if we need to update the position on screen or not in absolute pointing -
 	//used in absolute frame rate smoothing
 	int flag= 0;
@@ -267,6 +269,25 @@ public class LeapPointing : MonoBehaviour {
 	}
 
 	Vector2 SmoothingMethod(Vector2 inputVector) {
+		vArray[8]=inputVector;
+		Vector2 tmpPos;
+		Vector2 returnPos;
+		tmpPos.x = ((-21f*vArray[0].x) + (14f*vArray[1].x) + (39f*vArray[2].x) + (54f*vArray[3].x) + (59f*vArray[4].x) 
+			+ (54f*vArray[5].x) + (39f*vArray[6].x) + (14f*vArray[7].x) + (-21f*vArray[8].x))/231f;
+		tmpPos.y = ((-21f*vArray[0].y) + (14f*vArray[1].y) + (39f*vArray[2].y) + (54f*vArray[3].y) + (59f*vArray[4].y) 
+			+ (54f*vArray[5].y) + (39f*vArray[6].y) + (14f*vArray[7].y) + (-21f*vArray[8].y))/231f;
+		vArray[0]=vArray[1];
+		vArray[1]=vArray[2];
+		vArray[2]=vArray[3];
+		vArray[3]=vArray[4];
+		vArray[4]=vArray[5];
+		vArray[5]=vArray[6];
+		vArray[6]=vArray[7];
+		vArray[7]=vArray[8];
+		returnPos=tmpPos;
+		return returnPos;
+		
+		/*
 		Vector2 tmpPos;
 
 		tmpPos.x = ((0.35f*inputVector.x) + (0.35f*vPrevLeapPos.x) + (0.3f*vPrevPrevLeapPos.x));
@@ -274,6 +295,7 @@ public class LeapPointing : MonoBehaviour {
 		vPrevPrevLeapPos = vPrevLeapPos;
 		vPrevLeapPos = inputVector;
 		return tmpPos;
+		*/
 	}
 
 	///// ABSOLUTE POINTING MODE /////
@@ -374,22 +396,25 @@ public class LeapPointing : MonoBehaviour {
 
 		print ("vScreenConversion X: " + vScreenConversion.x + " Y: " + vScreenConversion.y);
 
-		//Update cursor coordinates in AppData
-		if (flag == 0 ) {
-			vCursorPos = SmoothingMethod(new Vector2(vScreenConversion.x * xRatio,vScreenConversion.y * yRatio));
-			vTmp = vCursorPos;
-			flag++;
-		} else if (flag == 1) {
-			vCursorPos = vTmp;
-			flag --;
-		}
+//		//Update cursor coordinates in AppData
+//		if (flag == 0 ){
+//		vCursorPos = SmoothingMethod(new Vector2(vScreenConversion.x * xRatio,vScreenConversion.y * yRatio));
+//		vTmpDelay = vCursorPos;
+//			flag++;
+//		} else if (flag == 1) {
+//			
+//			vCursorPos = vTmpDelay;
+//			flag --;
+//		}
+		
+		vCursorPos = SmoothingMethod(new Vector2(vScreenConversion.x * xRatio,vScreenConversion.y * yRatio));
 
 		print ("vCursorPos X: " + vCursorPos.x + " Y: " + vCursorPos.y);
 
 	}
 
 
-	//Update AppData after pointing method has calculated coords
+	//Update AppData after pointing method has calculated coords cv
 	void UpdateAppData() {
 		//Update cursor position
 		data.vCursorPos = vCursorPos;
