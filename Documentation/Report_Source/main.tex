@@ -58,8 +58,8 @@ Interface Technologies \\ % Tagline(s) or further description
 
 \vspace*{2\baselineskip} % Whitespace between location/year and editors
 
-Report by \\[\baselineskip]
-{\Large Afaque Hussain - 014126226 \\ Chris Blythe - 014258961 \\ Farbod Faghihi - 014343410  \\ Maninder Singh - \\ Payel Bandyopadhyay - 014174692 \par} % Editor list
+Report Submitted by \\[\baselineskip]
+{\Large Afaque Hussain - 014126226 \\ Chris Blythe - 014258961 \\ Farbod Faghihi - 014343410  \\   Maninder Singh - 014343397\\ Payel Bandyopadhyay - 014174692 \\} % Editor list
 %{\itshape University of Helsinki \\ Finland\par} % Editor affiliation
 
 \vfill % Whitespace between editor names and publisher logo
@@ -75,19 +75,39 @@ Report by \\[\baselineskip]
 \endgroup}
 
 \begin{document}
+\pagenumbering{roman}
+%\setcounter{page}{3}
 %\maketitle
-\pagestyle {empty}
+%\pagestyle {empty}
 \titleGP
 \clearpage
 
-\vspace{\fill}
-\begin{abstract}
-This project shows an application that can be used as a research tool to compare the ease of use between absolute pointing and relative pointing using Leap Motion Controller. It captures the quantifiable data in order to assess the effectiveness of different pointing techniques using a Leap Motion Controller. The application consists of four colored circles and four target circles. The user needs to select the colored circles one at a time and drag it to the respective target circles. The same task has to be done for both the pointing modes. For comparing the ease of use, we display the time a single user takes to complete the whole application, in each pointing mode. \\
+%\vspace{\fill}
+%\begin{document}
+%\pagenumbering{alph}
+%\begin{abstract}
+%This project shows an application that can be used as a research tool to compare the ease of use between absolute pointing and relative pointing using Leap Motion Controller. It captures the quantifiable data in order to assess the effectiveness of different pointing techniques using a Leap Motion Controller. The application consists of four colored circles and four target circles. The user needs to select the colored circles one at a time and drag it to the respective target circles. The same task has to be done for both the pointing modes. For comparing the ease of use, we display the time a single user takes to complete the whole task, in each pointing mode. \\
 
-The source code of the project is hosted on GitHub. The project can be cloned using this URL: https://github.com/afaquejam/LeapAbsRel.git.  
-\end{abstract}
-\vspace{\fill}
-\clearpage
+ 
+%\end{abstract}
+%\vspace{\fill}
+%\clearpage
+
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\section{Abstract}
+This project shows an application that can be used as a research tool to compare the ease of use between absolute pointing and relative pointing using Leap Motion Controller. It captures the quantifiable data in order to assess the effectiveness of different pointing techniques using a Leap Motion Controller. The application consists of four colored circles and four target circles. The user needs to select the colored circles one at a time and drag it to the respective target circles. The same task has to be done for both the pointing modes. For comparing the ease of use, we display the time a single user takes to complete the whole task, in each pointing mode. \\
+\newpage
+%\setcounter{page}{1}
+%\pagenumbering{arabic}
+%\begin{document}
+%\pagenumbering{roman}
+\section{Project URL}
+The source code of the project is hosted on GitHub. The project can be cloned using this URL: 
+
+https://github.com/afaquejam/LeapAbsRel.git. 
 
 \section{Introduction}
 Pointing is one of the most fundamental way in which users interact with computers. Pointing can be done with different techniques like pointing with help of an eye, pointing with help of a hand etc. In this project, the main focus is pointing with fingers. Figure 1 shows an overview of finger pointing.
@@ -95,7 +115,7 @@ Pointing is one of the most fundamental way in which users interact with compute
 \begin{figure}[!h]
 \centering
 \includegraphics[width=3.5in]{Figure_1}
-\caption{An overview of pointing with help of hand.}
+\caption{An overview of pointing with help of finger.}
 \end{figure}
 
 Pointing in a computer is done with various devices like mouse, joystick, trackball, touch-pad. In our project, we develop an application that enables pointing by fingers using a device called as Leap Motion Controller.
@@ -123,7 +143,7 @@ Pointing are of two types: relative pointing and absolute pointing. Absolute poi
 \item OS - Windows (version 7 or 8)
 \item Pointing device - Leap Motion Controller
 \item Framework - .NET 3.5 or above
-\item Software - Leap Motion Software, Airspace, Unity 4 
+\item Software - Leap Motion Software, Airspace, Unity 4 (Version 4.2.2f1)
 \end{itemize}
 
 {\bf Motive of the application}: The application developed in this project shows a comparison of ease of use of absolute pointing and relative pointing using Leap Motion Controller. In this application, a user performs the same task using two different pointing modes. 
@@ -150,7 +170,7 @@ In our project, we demonstrate the difference between absolute pointing and rela
 \caption{A schematic view of Leap Motion Controller \cite{4}.}
 \end{figure}
 
-Weichert et al. \cite{4} discuss about a new pointing device called Leap Motion Controller. This device has been used as the base of pointing device in our application. The Leap Motion Controller introduces a new methodology of interaction with the computers. It introduces a new gesture and position tracking system with sub-millimeter accuracy. The authors have shown the accuracy and robustness of the Leap Motion Controller. The controller is available to public and is currently been produced by Leap Motion \cite{5}. This controller calculates position in Cartesian space of predefined objects like finger tips, pen tip, etc. \cite{4}. These positions are in relation to the Leap Motion controller’s center point. The center point of the controller second infrared emitter. Figure 5 shows the schematic view of the Leap Motion Controller. The middle infrared emitter is the center point. It also consists of two infrared cameras. Figure 6 shows a top view of the Leap Motion Controller. The figure shows the position of the cameras in real life.
+Weichert et al. \cite{4} discuss about a new pointing device called Leap Motion Controller. This device has been used as the base of pointing device in our application. The Leap Motion Controller introduces a new methodology of interaction with the computers. It introduces a new gesture and position tracking system with sub-millimeter accuracy. The authors have shown the accuracy and robustness of the Leap Motion Controller. The controller is available to public and is currently been produced by Leap Motion \cite{5}. This controller calculates position in Cartesian space of predefined objects like finger tips, pen tip, etc. \cite{4}. These positions are in relation to the Leap Motion controller’s center point. The center point of the controller second infrared emitter. Figure 5 shows the schematic view of the Leap Motion Controller. The middle infrared emitter is the center point. It also consists of two infrared cameras. 
 
 \section{Design}
 This application allows a user to drag the circles to their respective target circles using two pointing modes (absolute pointing and relative pointing). The time to accomplish the task using both the pointing modes are being recorded. This application can act as a tool to compare between the two pointing modes to see if there are any identifiable differences in how effective each mode is compared to the other using Leap Motion Controller. 
@@ -207,7 +227,7 @@ KeyboardInput.cs script captures the keyboard input and updates global AppData. 
 \end{figure}
 
 
-The Bootstarp.cs script calls the main menu scene. It is to load the persistent DataObject to avoid duplication. The main menu scene consists of TitleGUI.cs script. It consist the user interface of the main menu. Figure 9 shows an overview of the interface of the main menu. This allows the user to choose between the two types of pointing modes. After choosing the required pointing mode, the user moves to the main application task area where the user performs the task of dragging circles.
+The Bootstarp.cs script calls the main menu scene. It is to load the persistent DataObject to avoid duplication. The main menu scene consists of TitleGUI.cs script. It consist the user interface of the main menu. Figure 8 shows an overview of the interface of the main menu. This allows the user to choose between the two types of pointing modes. After choosing the required pointing mode, the user moves to the main application task area where the user performs the task of dragging circles.
 
 \begin{figure}[!h]
 \centering
@@ -223,7 +243,7 @@ The relative pointing task scene consists of the following scripts:
     \item TaskTimer.cs
 \end{itemize}
 
-Pointer.cs script draws purple colored pointer (which acts as cursor) to the screen coordinates. It updates the coordinates from the AppData.cs script. The Circles.cs script draws 4 circles and 4 target circles on the screen. It also records state of the circles - grabbed or not grabbed. If the user successfully grabs or selects a ball, then it changes the color of the circles. It also redraws the circles if the user cannot successfully drag the ball inside the target circles. The application also changes color when the center of the ball and the target circle matches providing a user feedback. The TaskTimer.cs script displays the time taken for a user to complete the full task of drag and drop of circles to the target circles. It starts recording the time when a user first selects a ball for dragging and ends when the user successfully drops the last ball to the target circle. Figure 10 shows internal flow diagram of relative pointing task scene. 
+Pointer.cs script draws purple colored pointer (which acts as cursor) to the screen coordinates. It updates the coordinates from the AppData.cs script. The Circles.cs script draws 4 circles and 4 target circles on the screen. It also records state of the circles - grabbed or not grabbed. If the user successfully grabs or selects a ball, then it changes the color of the circles. It also redraws the circles if the user cannot successfully drag the ball inside the target circles. The application also changes color when the center of the ball and the target circle matches providing a user feedback. The TaskTimer.cs script displays the time taken for a user to complete the full task of drag and drop of circles to the target circles. It starts recording the time when a user first selects a ball for dragging and ends when the user successfully drops the last ball to the target circle. Figure 9 shows internal flow diagram of relative pointing task scene. 
 
 \begin{figure}[!h]
     \centering
@@ -254,10 +274,10 @@ The functionalities of each of the scripts have been explained above.
 
 \section{Development}
 
-The most significant elements of the application are the approaches taken for the relative and absolute pointing algorithms. Here a brief explanation of the relevant code contained in the LeapPointing script is provided.
+The most significant elements of the application are the approaches taken for the relative and absolute pointing algorithms. This section provides a brief explanation of the relevant code contained in the LeapPointing script mentioned in the previous scetion.
 
 \subsection{Relative pointing algorithm}
-A zone is defined for the leap motion based on predefined values for width and height above table top. This 'zone' is effectively the space a user will be moving their finger around in above the Leap device. The height of the leap zone is then dynamically calculated based on the dimensions of the Unity window resulting in the Leap zone having the same ratio as the Unity screen.(figure 11)
+A zone is defined for the leap motion based on predefined values for width and height above table top. This 'zone' is effectively the space a user will be moving their finger around in above the Leap device. The height of the leap zone is then dynamically calculated based on the dimensions of the Unity window resulting in the Leap zone having the same ratio as the Unity screen as shown in Figure 10.
 
 \begin{figure}[!h]
     \centering
@@ -265,7 +285,7 @@ A zone is defined for the leap motion based on predefined values for width and h
     \caption{Calculation of Leap zone dimensions.}
 \end{figure}
 
-The relative pointing algorithm takes raw data from the Leap in the form of the pre-stabilised position of the frontmost finger. The Leap coordinates (with X axis centred above the Leap device and Y zero located down at the device) are transformed to conform to Unity coordinates (0,0 top left) and adjusted to the dimensions of the previously defined Leap zone (figure 12).
+The relative pointing algorithm takes raw data from the Leap in the form of the pre-stabilised position of the frontmost finger. The Leap coordinates (with X axis centred above the Leap device and Y zero located down at the device) are transformed to conform to Unity coordinates (0,0 top left) and adjusted to the dimensions of the previously defined Leap zone as shown in Figure 11.
 
 \begin{figure}[!h]
     \centering
@@ -275,28 +295,24 @@ The relative pointing algorithm takes raw data from the Leap in the form of the 
  
 The StabilizedTipPosition method offered by the Leap has very effective context-sensitive filtering and stabilisation, so no further smoothing is required.
 
-Finally, when the application is in the RelativePointing mode (the relative pointing task screen as shown in Figure 14) the RelativePoint method (figure 13) gets the Unity adjusted coordinates from the  relative pointing algorithm and scales them to the screen dimensions using the Leap zone to screen size scaling value calculated in figure 11.
+Finally, when the application is in the RelativePointing mode (the relative pointing task screen as shown in Figure 12), the RelativePoint method (as shown in Figure 13) gets the Unity adjusted coordinates from the  relative pointing algorithm and scales them to the screen dimensions using the Leap zone to screen size scaling value calculated in figure 10.
 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=7.0in]{Figure_13}
-    \caption{RelativePoint method scaling results from relative pointing algorithm to screen size.}
-\end{figure}
-
-Figure 13 – RelativePoint method scaling results from relative pointing algorithm to screen size.
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=7.0in]{Figure_12}
     \caption{A screenshot of relative pointing task scene of the application.}
 \end{figure}
 
 
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=7.0in]{Figure_12}
+    \caption{RelativePoint method scaling results from relative pointing algorithm to screen size.}
+\end{figure}
+
+
 \subsection{Absolute Pointing}
-The absolute algorithm (figure 15) makes use of a Leap feature where the angle of a finger is used to project a line onto a virtual screen which returns a coordinate where the projected line intersects with the virtual screen.
- 
-Initially the closest finger to the screen is defined. Then a virtual screen that that fingers projected line is intersecting with is identified, and the intersection coordinate is captured in vLeapIntersect.
- 
-After converting the Leap vector to a Vector2, the coordinates are scaled up from their normalised form to create a virtual screen with coordinates transposed to the Unity system.
+The absolute algorithm (as shown in Figure 14) makes use of a Leap feature where the angle of a finger is used to project a line onto a virtual screen which returns a coordinate where the projected line intersects with the virtual screen. Initially the closest finger to the screen is defined. Then a virtual screen that that fingers projected line is intersecting with is identified, and the intersection coordinate is captured in vLeapIntersect. After converting the Leap vector to a Vector2, the coordinates are scaled up from their normalised form to create a virtual screen with coordinates transposed to the Unity system.
  
 To create the relationship between the virtual screen and the real screen, reference points (of top left and bottom right), which were defined during calibration, are used. The virtual screen coordinates are scaled to real window coordinates based on the ratio between virtual screen dimensions and the reference points (defining the real screen dimensions).
  
@@ -305,21 +321,33 @@ Finally smoothing is applied. This is required as the sensitivity of the Leap de
 \begin{figure}[!h]
     \centering
     \includegraphics[width=7.0in]{Figure_14}
-    \caption{A screenshot of relative pointing task scene of the application.}
+    \caption{Absolute pointing algorithm.}
 \end{figure}
 
-The smoothing algorithm (figure 16) employs a Savitzky-Golay algorithm. It applies
-weighting coefficients to the last 9 frame coordinates giving prominence to the coordinates in the middle of the data set. This effectively fits the data into a polynomial which reduces the impact of noisy coordinates and produces a cosmetic smoothing effect for the pointer on screen.
+The smoothing algorithm (as shown in Figure 15) employs a Savitzky-Golay algorithm. It applies weighting coefficients to the last 9 frame coordinates giving prominence to the coordinates in the middle of the data set. This effectively fits the data into a polynomial which reduces the impact of noisy coordinates and produces a cosmetic smoothing effect for the pointer on screen.
 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=7.0in]{Figure_15}
-    \caption{Absolute pointing algorithm.}
+    \caption{Absolute smoothing algorithm.}
 \end{figure}
 
 \section{Discussion}
-The application developed in this project shows the comparison of absolute pointing and relative pointing with help of Leap motion controller. The very first challenge we faced was to narrow down to the programming language to be used for developing applications which use Leap Motion. As Leap Motion is still in its infancy, the documentation is not easy to follow, although its getting better. The next challenge was getting desired usability for users to be able to complete the tasks.  The last challenge in absolute pointing mode was pointer jitter problems. There were issues with pointer stability due to the Leap Motions high sensitivity and humans natural hand tremors. Hence to overcome this problem smoothing algorithm was used. Regarding the development of the application, the challenge was, according to the documentation of Lead SDK, it could be used as a plug-in in a Unity application using Pro version of Unity. Anyways using some tweaks, we got to interact with a sample unity application using leap motion with a free version too. Also, the main requirement of the application development was Leap Motion Controller. Given a team size of 5 members, only one controller was available. If one more controller was available then the development process would have been easier and convenient. The availability of the Leap Motion controller was a problem. Also, the Leap Motion controller had stopped working twice. It might be a bug of the Controller. After un-installing and reinstalling the leap software, the device started working once again.
 
+The application developed in this project shows the comparison of absolute pointing and relative pointing effectiveness with help of Leap motion controller. Figure 16 shows what a user achieves at the end of completing a task in absolute pointing mode. As mentioned earlier, the same task is achieved in relative pointing mode also.
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=6.0in]{Figure_16}
+    \caption{A screenshot of absolute pointing screen that a user achieves after completing the task.}
+\end{figure}
+
+While development of this application, number of challenges were faced. The very first challenge we faced was to narrow down to the programming language to be used for developing applications which use Leap Motion. As Leap Motion is still in its infancy, the documentation is not easy to follow, although its getting better. Regarding the development of the application, the challenge was, according to the documentation of Lead SDK, it could be used as a plug-in in a Unity application using Pro version of Unity. Anyways using some tweaks, we got it to interact with a sample unity application using leap motion with a free version too. The next challenged faced was with Unity support for 2D graphics. Unity inherently provides a 3D development environment, hence developing a 2D graphical user interface in Unity was a challenge. Part of the challenge was the poor support Unity provided for 2D graphics, and we had to use the limited GUI functions in Unity to draw everything. The other disappointing aspect of this was to loose a great deal of Unity's power in the form of object configuration and reuse. Although we worked hard to modularise code in the form of multiple interacting scripts, all the graphical elements had to be drawn procedurally from within scripts. Controlling the mouse cursor from within Unity was our next challenge. Initially we expected to use the mouse cursor on screen and control its position using the Leap motion. However it turned out it is difficult to do and research on the web consistently returned the answer that it was not possible (Unity had no explicit way of  controlling the mouse). To solve this we implemented our own 2D texture (the purple spot) to use as an on screen pointer. Later, during a discussion with Imtiaj  (our project tutor), we found out a way of importing user32.dll and using it to access native mouse commands and position. We implemented this type of cursor control on the menu screen and kept the graphical cursor for the pointing task scenes.
+
+The next challenge was getting desired usability for users to be able to complete the tasks. Although working out how to approach relative pointing using the Leap API was pretty straight forward, it was more of a challenge to deal with the absolute pointing. We were able to see some of the mechanisms used through examining other code examples, but it wasn't until Imtiaj (our project tutor) explained the principles of a line projected from a finger intersecting with a virtual screen that we were able to get to grips with it and work out an implementation in Unity. The last challenge in absolute pointing mode was pointer jitter problems. There were issues with pointer stability due to the Leap Motions high sensitivity and humans natural hand tremors. Hence to overcome this problem smoothing algorithm was used. Initially we implemented a gesture using the thumb for picking up (grabbing) the circles to drag them. When the thumb is extended out at an angle from the forefinger the pointer is 'ungrabbed', and when the thumb is drawn in to lie alongside the hand the pointer grabs any circle it is over. Although this mechanism worked well initially two problems later came to light. During early user testing it was discovered that some peoples hands did not work consistently with the gesture detection implementation and sometimes dropped the circles unintentionally. This was considered to be a major problem if task completion was being timed, as an unintentional drop of a circle would negatively skew the test results and not be a true representation of  pointing usability. The second issue was with absolute pointing. If the thumb grab mode worked for an individual, it worked well in the relative pointing task. However when the absolute pointing algorithm was completed, it was discovered that the sensitivity inherent in absolute pointing (i.e. the small angle change required to point from one side of the real screen to the other) resulted in the pointer drifting when the user made the grab action with the thumb. This made it difficult to pick up the circles on occasions, again negatively effecting the time result. To solve these problems, we added another form of grab control, and allow users to toggle between them allowing a choice. The alternative grab turns off the thumb grab mode and allows the left mouse button or the space bar to be pressed to grab the circles. This has proved to be very effective allowing users to choose how they interact with the application as best suits them.
+  
+Also, some challenges were faced regarding the softwares used in this project. The Leap Motion controller had stopped working twice. It is a bug of the Controller. After un-installing and reinstalling the leap software, the device started working once again. Unity 3d game engine supports only Mac OSX and Microsoft Windows and in order to work with that some of us had to install Windows in their system. Another problem with Unity was that it does not support Java, they provide something close to Java called UnityScript which is referred to as JavaScript by the software. So in order to edit the code we had to learn UnityScript or C#. In short, the development tools provided by the Unity game engine is somehow limited.
+
+Also, the main requirement of the application development was Leap Motion Controller. Given a team size of 5 members, only one controller was available. If one more controller was available then the development process would have been easier and convenient. The availability of the Leap Motion controller was a problem. 
 
 
 \section{Conclusion}
